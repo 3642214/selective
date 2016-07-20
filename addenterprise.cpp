@@ -12,8 +12,11 @@ AddEnterprise::AddEnterprise(db* myDB,QWidget *parent) :
     //    this->myDB->setDetail(mDetail);
 
     this->addRow(this->myDB->getAllEnterprise());
-    defalutFlag = ui->tableWidget->item(0,0)->flags();
-    unWriteFlag = defalutFlag&~(Qt::ItemIsEditable);
+    defalutFlag = Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsDropEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled;
+
+    unWriteFlag = Qt::ItemIsSelectable|Qt::ItemIsDragEnabled|Qt::ItemIsDropEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled;
+//    defalutFlag = ui->tableWidget->item(0,0)->flags();
+//    unWriteFlag = defalutFlag&~(Qt::ItemIsEditable);
     setAllUnWrite();
     hideBtn();
 }
@@ -81,9 +84,11 @@ void AddEnterprise::setRowCanWrite(int row)
 {
     modiftRow = row;
     int culSize = ui->tableWidget->columnCount();
+    qDebug()<<"culSize is "<<culSize;
     for(int i=1;i<culSize-1;i++){
         ui->tableWidget->item(modiftRow,i)->setFlags(defalutFlag);
     }
+    ui->tableWidget->item(modiftRow,0)->setFlags(unWriteFlag);
     ui->tableWidget->item(modiftRow,culSize-1)->setFlags(unWriteFlag);
 }
 
@@ -171,7 +176,13 @@ void AddEnterprise::on_commit_clicked()
 
 void AddEnterprise::on_cancel_clicked()
 {
-    setRowUnWrite();
+    int rowCount = ui->tableWidget->rowCount();
+    qDebug()<<rowCount;
+    if(ui->tableWidget->item(modiftRow,0)->text().toInt() == 0){
+       ui->tableWidget->removeRow(modiftRow);
+    }else{
+        setRowUnWrite();
+    }
     ui->tableWidget->clearSelection();
     hideBtn();
 }
@@ -191,6 +202,7 @@ void AddEnterprise::hideBtn(){
     ui->del->setEnabled(true);
     ui->modify->setEnabled(true);
     ui->search->setEnabled(true);
+    ui->clean->setEnabled(true);
 }
 
 void AddEnterprise::showBtn(){
@@ -200,10 +212,12 @@ void AddEnterprise::showBtn(){
     ui->del->setEnabled(false);
     ui->modify->setEnabled(false);
     ui->search->setEnabled(false);
+    ui->clean->setEnabled(false);
 }
 
 void AddEnterprise::on_search_clicked()
 {
     ui->tableWidget->setRowCount(0);
     addRow(myDB->searchEnterprise(ui->ext->text()));
+    setAllUnWrite();
 }
