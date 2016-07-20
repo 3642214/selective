@@ -12,8 +12,10 @@ AddEnterprise::AddEnterprise(db* myDB,QWidget *parent) :
     //    this->myDB->setDetail(mDetail);
 
     this->addRow(this->myDB->getAllEnterprise());
-    defalutFlag = ui->tableWidget->item(0,0)->flags();
+//    defalutFlag = ui->tableWidget->item(0,0)->flags();
+    defalutFlag=Qt::NoItemFlags ;
     unWriteFlag = defalutFlag&~(Qt::ItemIsEditable);
+    qDebug()<<defalutFlag<<unWriteFlag;
     setAllUnWrite();
     hideBtn();
 }
