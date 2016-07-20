@@ -1,5 +1,6 @@
 #include "db.h"
 #include <QFileDialog>
+#include <QString>
 
 db::db(QString fileName)
 {
@@ -7,7 +8,6 @@ db::db(QString fileName)
     ddb = QSqlDatabase::addDatabase("QSQLITE");
 //    ddb.setDatabaseName("./selective.db");
     ddb.setDatabaseName(fileName);
-
     if(!ddb.open())
     {
         QMessageBox::critical(0, QObject::tr("错误"),QObject::tr("无法打开数据库文件。。。！！！"));

@@ -6,130 +6,90 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>654</width>
-    <height>358</height>
+    <width>692</width>
+    <height>429</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>企业抽查</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="widget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>301</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <widget class="QLineEdit" name="lineEdit">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>113</width>
-       <height>21</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_2">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>113</width>
-       <height>21</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>50</y>
-       <width>114</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>seletive</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="comboBox">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>20</y>
-       <width>111</width>
-       <height>26</height>
-      </rect>
-     </property>
-     <item>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLineEdit" name="lineEdit_2"/>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit"/>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox">
+         <item>
+          <property name="text">
+           <string>所有企业</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>本年度未被抽查企业</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>seletive</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="addEnterprise">
       <property name="text">
-       <string>所有企业</string>
+       <string>add enterprise</string>
       </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>本年度未被抽查企业</string>
-      </property>
-     </item>
-    </widget>
-   </widget>
-   <widget class="QTableWidget" name="tableWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>100</y>
-      <width>631</width>
-      <height>241</height>
-     </rect>
-    </property>
-    <column>
-     <property name="text">
-      <string>ID</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>单位名称</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>废水量</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>单位地址</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>电话</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>上次被抽时间</string>
-     </property>
-    </column>
-   </widget>
-   <widget class="QPushButton" name="addEnterprise">
-    <property name="geometry">
-     <rect>
-      <x>420</x>
-      <y>40</y>
-      <width>114</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>add enterprise</string>
-    </property>
-   </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="tableWidget">
+      <column>
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>单位名称</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>废水量</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>单位地址</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>电话</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>上次被抽时间</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

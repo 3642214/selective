@@ -2,13 +2,17 @@
 #include "ui_mainwindow.h"
 #include "addenterprise.h"
 #include <QDebug>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    myDB = new db();
+
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Open db file"), ".", tr("db Files (*.db)"));
+    myDB = new db(fileName);
 }
 
 MainWindow::~MainWindow()

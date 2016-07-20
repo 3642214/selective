@@ -45,7 +45,7 @@ class db
 private:
     QSqlDatabase ddb;
 public:
-    db();
+    db(QString fileName);
     void initDB();
     QList<detail> getAllEnterprise();
     bool setDetail(detail myDetail);
