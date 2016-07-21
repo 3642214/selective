@@ -3,6 +3,7 @@
 #include "addenterprise.h"
 #include <QDebug>
 #include <QFileDialog>
+#include <time.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -10,9 +11,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-//    QString fileName = QFileDialog::getOpenFileName(this,
-//        tr("Open db file"), ".", tr("db Files (*.db)"));
+    //    QString fileName = QFileDialog::getOpenFileName(this,
+    //        tr("Open db file"), ".", tr("db Files (*.db)"));
     myDB = new db("./selective.db");
+    qsrand(time(NULL));
 }
 
 MainWindow::~MainWindow()
@@ -32,8 +34,31 @@ void MainWindow::on_seletiveButton_clicked()
     int water = ui->waterCombo->currentIndex();
     int per = ui->perCombo->currentIndex();
     int enterPrise = ui->enterpriseCombo->currentIndex();
+    int enterPriseCount = 0;
+    QList<detail> list = myDB->searchEnterprise(water,enterPrise);
+    QList<detail> newList;
+    switch (per) {
+    case 0:
+        enterPriseCount = list.size()*0.05;
+        break;
+    case 1:
+        enterPriseCount = list.size()*0.1;
+        break;
+    case 2:
+        enterPriseCount = list.size()*0.3;
+        break;
+    default:
+        break;
+    }
+     QMessageBox::critical(0, tr(""), tr("符合的企业数 ")+QString::number(list.size()) +tr("个.抽签企业数 ")+QString::number(enterPriseCount)+tr("个"));
+    qDebug()<<"符合企业数"<<list.size()<<" 抽签数 "<<enterPriseCount+1;
+    for(int i = 0;i<enterPriseCount;i++){
+        int n = qrand() % list.size();
+        newList<<list.at(n);
+        list.removeAt(n);
+    }
 
-    addRow(myDB->searchEnterprise(water,enterPrise));
+    addRow(newList);
 }
 
 void MainWindow::addRow(QList<detail> d){

@@ -86,6 +86,7 @@ bool db::updateDetail(detail myDetail)
     QSqlQuery sql_q;
     QString setDetail_sql = "update detail set name = :name,wasteWater = :wasteWater,address = :address,contract = :contract ,phone = :phone,lastTime = :lastTime where id = :id";
     sql_q.prepare(setDetail_sql);
+    sql_q.bindValue(":id",myDetail.id);
     sql_q.bindValue(":name",myDetail.name);
     sql_q.bindValue(":wasteWater",myDetail.wasteWater);
     sql_q.bindValue(":address",myDetail.address);
@@ -172,23 +173,23 @@ QList<detail> db::searchEnterprise(int water ,bool allEnterPrise)
     QSqlQuery sql_q;
     QString enterprisesString,waterString;
     if(!allEnterPrise){
-        enterprisesString = "and lastTime is null";
+        enterprisesString = "and lastTime = \"\"";
     }
     switch (water) {
     case 0:
-        waterString = "wasteWater => 500 and wasteWater <= 1000 ";
+        waterString = "wasteWater > 499 and wasteWater < 1001 ";
         break;
     case 1:
-        waterString = "wasteWater => 1001 and wasteWater <= 5000 ";
+        waterString = "wasteWater > 1000 and wasteWater < 5001 ";
         break;
     case 2:
-        waterString = "wasteWater => 5000 ";
+        waterString = "wasteWater > 5000 ";
         break;
     default:
         break;
     }
-//    QString getEtalon_sql = "select * from detail where "+waterString + enterprisesString;
-     QString getEtalon_sql = "SELECT * FROM detail where wasteWater > 5";
+    QString getEtalon_sql = "SELECT * FROM detail where "+waterString + enterprisesString;
+//     QString getEtalon_sql = "SELECT * FROM detail where wasteWater > 5000";
     qDebug()<<getEtalon_sql;
     sql_q.prepare(getEtalon_sql);
     if(!sql_q.exec())
