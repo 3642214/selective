@@ -6,11 +6,12 @@ db::db(QString fileName)
 {
     //    ddb = QSqlDatabase::addDatabase(QSqlDatabase::driver())
     ddb = QSqlDatabase::addDatabase("QSQLITE");
-//    ddb.setDatabaseName("./selective.db");
+    //    ddb.setDatabaseName("./selective.db");
     ddb.setDatabaseName(fileName);
     if(!ddb.open())
     {
-        QMessageBox::critical(0, QObject::tr("错误"),QObject::tr("无法打开数据库文件。。。！！！"));
+        //        QMessageBox::critical(0, QObject::tr("错误"),QObject::tr("无法打开数据库文件。。。！！！"));
+        QMessageBox::critical(0, QObject::tr("错误"),ddb.lastError().text());
         exit(0);
     }
 }
@@ -146,6 +147,47 @@ QList<detail> db::searchEnterprise(QString name)
     QList<detail> enterprises;
     QSqlQuery sql_q;
     QString getEtalon_sql = "select * from detail where name like \"%"+name+"%\"";
+    qDebug()<<getEtalon_sql;
+    sql_q.prepare(getEtalon_sql);
+    if(!sql_q.exec())
+    {
+        logError;
+    }
+    else
+    {
+        logOK;
+    }
+    while (sql_q.next()) {
+        detail myDetail = SETDETAIL;
+        qdebugDetail;
+        enterprises<<myDetail;
+    }
+    return enterprises;
+}
+
+//搜索符合条件的企业
+QList<detail> db::searchEnterprise(int water ,bool allEnterPrise)
+{
+    QList<detail> enterprises;
+    QSqlQuery sql_q;
+    QString enterprisesString,waterString;
+    if(!allEnterPrise){
+        enterprisesString = "and lastTime is null";
+    }
+    switch (water) {
+    case 0:
+        waterString = "wasteWater => 500 and wasteWater <= 1000 ";
+        break;
+    case 1:
+        waterString = "wasteWater => 1001 and wasteWater <= 5000 ";
+        break;
+    case 2:
+        waterString = "wasteWater => 5000 ";
+        break;
+    default:
+        break;
+    }
+    QString getEtalon_sql = "select * from detail where "+waterString + enterprisesString;
     qDebug()<<getEtalon_sql;
     sql_q.prepare(getEtalon_sql);
     if(!sql_q.exec())

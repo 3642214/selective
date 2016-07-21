@@ -19,13 +19,45 @@
      <widget class="QWidget" name="widget" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLineEdit" name="lineEdit_2"/>
+        <widget class="QComboBox" name="waterCombo">
+         <item>
+          <property name="text">
+           <string>500-1000t</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1001-5000t</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>5001t</string>
+          </property>
+         </item>
+        </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QComboBox" name="perCombo">
+         <item>
+          <property name="text">
+           <string>5%</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>10%</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>30%</string>
+          </property>
+         </item>
+        </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="enterpriseCombo">
          <item>
           <property name="text">
            <string>所有企业</string>
@@ -39,7 +71,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="seletiveButton">
          <property name="text">
           <string>seletive</string>
          </property>
@@ -49,14 +81,46 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="addEnterprise">
-      <property name="text">
-       <string>add enterprise</string>
-      </property>
+     <widget class="QWidget" name="widget_2" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QPushButton" name="addEnterprise">
+         <property name="text">
+          <string>add enterprise</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="saveAsButton">
+         <property name="text">
+          <string>导出结果</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
     <item>
      <widget class="QTableWidget" name="tableWidget">
+      <property name="editTriggers">
+       <set>QAbstractItemView::AllEditTriggers</set>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
       <column>
        <property name="text">
         <string>ID</string>
@@ -75,6 +139,11 @@
       <column>
        <property name="text">
         <string>单位地址</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>联系人</string>
        </property>
       </column>
       <column>

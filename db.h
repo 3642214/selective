@@ -52,6 +52,7 @@ public:
     bool delDetail(int id);
     bool updateDetail(detail myDetail);
     QList<detail> searchEnterprise(QString name);
+    QList<detail> searchEnterprise(int water ,bool allEnterPrise);
     int getLastId();
 };
 
