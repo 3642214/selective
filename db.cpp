@@ -207,3 +207,22 @@ QList<detail> db::searchEnterprise(int water ,bool allEnterPrise)
     }
     return enterprises;
 }
+
+bool db::cleanTime()
+{
+    qDebug()<<"clean time ";
+    QSqlQuery sql_q;
+    QString setDetail_sql = "update detail set lastTime = :lastTime";
+    sql_q.prepare(setDetail_sql);
+    sql_q.bindValue(":lastTime","");
+    if(!sql_q.exec())
+    {
+        logError;
+    }
+    else
+    {
+        logOK;
+    }
+    return true;
+
+}

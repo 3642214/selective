@@ -26,6 +26,7 @@ private slots:
     void on_addEnterprise_clicked();
 
     void on_seletiveButton_clicked();
+   void on_saveAsButton_clicked();
 
 
 private:

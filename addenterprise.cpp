@@ -1,5 +1,9 @@
 #include "addenterprise.h"
 #include "ui_addenterprise.h"
+#include <QAxBase>
+#include <QAxObject>
+#include <QFileDialog>
+#include <QVariant>
 
 AddEnterprise::AddEnterprise(db* myDB,QWidget *parent) :
     QDialog(parent),
@@ -10,13 +14,13 @@ AddEnterprise::AddEnterprise(db* myDB,QWidget *parent) :
     //    this->myDB->initDB();
     //    detail mDetail = {1,"222",33,"44","55","66","77"};
     //    this->myDB->setDetail(mDetail);
-
-    this->addRow(this->myDB->getAllEnterprise());
+    ui->search->click();
+    //    this->addRow(this->myDB->getAllEnterprise());
     defalutFlag = Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsDragEnabled|Qt::ItemIsDropEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled;
 
     unWriteFlag = Qt::ItemIsSelectable|Qt::ItemIsDragEnabled|Qt::ItemIsDropEnabled|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled;
-//    defalutFlag = ui->tableWidget->item(0,0)->flags();
-//    unWriteFlag = defalutFlag&~(Qt::ItemIsEditable);
+    //    defalutFlag = ui->tableWidget->item(0,0)->flags();
+    //    unWriteFlag = defalutFlag&~(Qt::ItemIsEditable);
     setAllUnWrite();
     hideBtn();
 }
@@ -179,7 +183,7 @@ void AddEnterprise::on_cancel_clicked()
     int rowCount = ui->tableWidget->rowCount();
     qDebug()<<rowCount;
     if(ui->tableWidget->item(modiftRow,0)->text().toInt() == 0){
-       ui->tableWidget->removeRow(modiftRow);
+        ui->tableWidget->removeRow(modiftRow);
     }else{
         setRowUnWrite();
     }
@@ -220,4 +224,87 @@ void AddEnterprise::on_search_clicked()
     ui->tableWidget->setRowCount(0);
     addRow(myDB->searchEnterprise(ui->ext->text()));
     setAllUnWrite();
+    ui->tableWidget->resizeColumnsToContents();
+    resetSize();
+}
+
+void AddEnterprise::on_clean_clicked()
+{
+    myDB->cleanTime();
+    ui->search->click();
+}
+
+void AddEnterprise::on_importdb_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    tr("Open excel file"), ".", tr("excel Files (*.xls *.xlsx)"));
+    QAxObject *excel = NULL;
+    QAxObject *workbooks = NULL;
+    QAxObject *workbook = NULL;
+    QAxObject *cell=NULL;
+    excel = new QAxObject("Excel.Application");
+    if (excel->isNull()) {//网络中很多使用excel==NULL判断，是错误的
+        QMessageBox::critical(0, "错误信息", "没有找到EXCEL应用程序");
+        return;
+    }
+    excel->dynamicCall("SetVisible(bool)", false);
+    workbooks = excel->querySubObject("WorkBooks");
+    workbook = workbooks->querySubObject("Open(QString,QVariant,QVariant)", fileName,3,true);//两个参数时，三个参数true和false都很正常，false 锁定excel文件，其它程序只能只读方式打开，否则程序正在处理excel文件时，在外面打开excel，程序异常退出
+    if (!workbook) {
+        QMessageBox::critical(0, "错误信息", "excel 文件不存在");
+        return;
+    }
+    QAxObject * worksheet = workbook->querySubObject("WorkSheets(int)", 1);//打开第一个sheet
+    QAxObject * usedrange = worksheet->querySubObject("UsedRange");//获取该sheet的使用范围对象
+    QAxObject * rows = usedrange->querySubObject("Rows");
+    QAxObject * columns = usedrange->querySubObject("Columns");
+
+    int intRowStart = usedrange->property("Row").toInt();
+    int intColStart = usedrange->property("Column").toInt();
+    int intCols = columns->property("Count").toInt();
+    int intRows = rows->property("Count").toInt();
+    int j = 0;
+
+    for(int i=3;i <intRowStart + intRows;i++,j++){
+        //        for(int j=2 ;j<intColStart+intCols;j++){
+        //            cell = worksheet->querySubObject("Cells(int,int)", i,j ); //获取单元格
+        //            qDebug()<<i<<j<<cell->property("Value").toString();
+        //            int id;             //id
+        //            QString name;       //企业名称
+        //            int wasteWater;     //废水量
+        //            QString address;    //企业地址
+        //            QString contract;   //联系人
+        //            QString phone;      //电话
+        //            QString lastTime;   //最后次抽中时间
+        detail m_detal ={
+            0,
+            worksheet->querySubObject("Cells(int,int)", i,2 )->property("Value").toString(),
+            int(worksheet->querySubObject("Cells(int,int)", i,6 )->property("Value").toDouble()*10000),
+            worksheet->querySubObject("Cells(int,int)", i,3 )->property("Value").toString(),
+            worksheet->querySubObject("Cells(int,int)", i,4 )->property("Value").toString(),
+            worksheet->querySubObject("Cells(int,int)", i,5 )->property("Value").toString(),
+            ""
+        };
+        myDB->setDetail(m_detal);
+        //        }
+    }
+    QMessageBox::critical(0, tr("完成"), tr("共导入")+QString::number(j)+tr("条数据"));
+    ui->search->click();
+    workbook->dynamicCall("Close (Boolean)", false);
+    excel->dynamicCall("Quit (void)");
+    delete workbook;
+    delete workbooks;
+    delete excel;
+}
+
+void AddEnterprise::resetSize()
+{
+    int width = 0;
+    int i = 0;
+    int c = ui->tableWidget->columnCount();
+    for(;i<=c;i++){
+        width += ui->tableWidget->columnWidth(i);
+    }
+    qDebug()<<width;
+    this->resize(width+80,this->height());
 }

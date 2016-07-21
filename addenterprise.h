@@ -34,6 +34,10 @@ private slots:
 
     void on_search_clicked();
 
+    void on_clean_clicked();
+
+    void on_importdb_clicked();
+
 private:
     Ui::AddEnterprise *ui;
     void initItem(int row);
@@ -47,6 +51,7 @@ private:
     Qt::ItemFlags unWriteFlag;
     void hideBtn();
     void showBtn();
+    void resetSize();
 };
 
 #endif // ADDENTERPRISE_H
