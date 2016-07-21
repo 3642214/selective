@@ -187,7 +187,8 @@ QList<detail> db::searchEnterprise(int water ,bool allEnterPrise)
     default:
         break;
     }
-    QString getEtalon_sql = "select * from detail where "+waterString + enterprisesString;
+//    QString getEtalon_sql = "select * from detail where "+waterString + enterprisesString;
+     QString getEtalon_sql = "SELECT * FROM detail where wasteWater > 5";
     qDebug()<<getEtalon_sql;
     sql_q.prepare(getEtalon_sql);
     if(!sql_q.exec())
