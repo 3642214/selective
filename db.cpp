@@ -172,7 +172,7 @@ QList<detail> db::searchEnterprise(int water ,bool allEnterPrise)
     QList<detail> enterprises;
     QSqlQuery sql_q;
     QString enterprisesString,waterString;
-    if(!allEnterPrise){
+    if(allEnterPrise){
         enterprisesString = "and lastTime = \"\"";
     }
     switch (water) {
@@ -224,5 +224,23 @@ bool db::cleanTime()
         logOK;
     }
     return true;
+}
 
+bool db::setTime(QString time ,int id)
+{
+    qDebug()<<"set time ";
+    QSqlQuery sql_q;
+    QString setDetail_sql = "update detail set lastTime = :lastTime where id = :id";
+    sql_q.prepare(setDetail_sql);
+    sql_q.bindValue(":lastTime",time);
+     sql_q.bindValue(":id",id);
+    if(!sql_q.exec())
+    {
+        logError;
+    }
+    else
+    {
+        logOK;
+    }
+    return true;
 }

@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <time.h>
-
+#include <QDateTime>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -32,6 +32,7 @@ void MainWindow::on_addEnterprise_clicked()
 
 void MainWindow::on_seletiveButton_clicked()
 {
+    ui->tableWidget->setRowCount(0);
     int water = ui->waterCombo->currentIndex();
     int per = ui->perCombo->currentIndex();
     int enterPrise = ui->enterpriseCombo->currentIndex();
@@ -58,7 +59,14 @@ void MainWindow::on_seletiveButton_clicked()
         newList<<list.at(n);
         list.removeAt(n);
     }
-
+    for(int i=0;i<newList.size();i++){
+        detail newDetail = newList.at(i);
+        QString now = QDateTime::currentDateTime().toString("yyyy-MM-dd h:m:s");
+        newDetail.lastTime=now;
+        myDB->setTime(now,(detail(newList.at(i))).id);
+        newList.replace(i,newDetail);
+        qDebug()<<newDetail.lastTime;
+    }
     addRow(newList);
     ui->tableWidget->resizeColumnsToContents();
 }
@@ -70,14 +78,15 @@ void MainWindow::addRow(QList<detail> d){
         ui->tableWidget->setRowCount(detailsSize);
         int i = 0;
         for(;i<detailsSize;i++){
-            detail m_detail = d.at(i);
-            ui->tableWidget->setItem(i,0,new QTableWidgetItem(QString::number(m_detail.id)));
-            ui->tableWidget->setItem(i,1,new QTableWidgetItem(QString(m_detail.name)));
-            ui->tableWidget->setItem(i,2,new QTableWidgetItem(QString::number(m_detail.wasteWater)));
-            ui->tableWidget->setItem(i,3,new QTableWidgetItem(QString(m_detail.address)));
-            ui->tableWidget->setItem(i,4,new QTableWidgetItem(QString(m_detail.contract)));
-            ui->tableWidget->setItem(i,5,new QTableWidgetItem(QString(m_detail.phone)));
-            ui->tableWidget->setItem(i,6,new QTableWidgetItem(QString(m_detail.lastTime)));
+            detail myDetail = d.at(i);
+            qdebugDetail;
+            ui->tableWidget->setItem(i,0,new QTableWidgetItem(QString::number(myDetail.id)));
+            ui->tableWidget->setItem(i,1,new QTableWidgetItem(QString(myDetail.name)));
+            ui->tableWidget->setItem(i,2,new QTableWidgetItem(QString::number(myDetail.wasteWater)));
+            ui->tableWidget->setItem(i,3,new QTableWidgetItem(QString(myDetail.address)));
+            ui->tableWidget->setItem(i,4,new QTableWidgetItem(QString(myDetail.contract)));
+            ui->tableWidget->setItem(i,5,new QTableWidgetItem(QString(myDetail.phone)));
+            ui->tableWidget->setItem(i,6,new QTableWidgetItem(QString(myDetail.lastTime)));
         }
     }
 }

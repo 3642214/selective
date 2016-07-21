@@ -55,6 +55,7 @@ public:
     QList<detail> searchEnterprise(int water ,bool allEnterPrise);
     int getLastId();
     bool cleanTime();
+    bool setTime(QString time ,int id);
 };
 
 #endif // DB_H
