@@ -1,7 +1,9 @@
 #include "addenterprise.h"
 #include "ui_addenterprise.h"
+#ifdef Q_OS_WIN32
 #include <QAxBase>
 #include <QAxObject>
+#endif
 #include <QFileDialog>
 #include <QVariant>
 
@@ -236,6 +238,7 @@ void AddEnterprise::on_clean_clicked()
 
 void AddEnterprise::on_importdb_clicked()
 {
+    #ifdef Q_OS_WIN32
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open excel file"), ".", tr("excel Files (*.xls *.xlsx)"));
     QAxObject *excel = NULL;
@@ -295,6 +298,9 @@ void AddEnterprise::on_importdb_clicked()
     delete workbook;
     delete workbooks;
     delete excel;
+#else
+    QMessageBox::critical(0, tr("错误"), tr("该功能仅支持WIN系统"));
+#endif
 }
 
 void AddEnterprise::resetSize()

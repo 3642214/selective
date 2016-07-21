@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql axcontainer
+QT       += core gui sql
+WIN32{QT       +=axcontainer}
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,5 +29,6 @@ DISTFILES += \
     icon.ico
 
 RC_FILE = ico.rc
+
 
 
