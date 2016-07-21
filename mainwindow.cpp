@@ -79,3 +79,48 @@ void MainWindow::addRow(QList<detail> d){
         }
     }
 }
+
+void MainWindow::on_saveAsButton_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save excel"),".", tr("Microsoft Office 2003 (*.csv)"));//获取保存路径
+    if (fileName.isEmpty()) {
+        QMessageBox::critical(0, tr("错误"), tr("要保存的文件名为空！"));
+        return;
+    }
+    QFile* m_file = new QFile(fileName);
+    if(m_file->open(QIODevice::WriteOnly))
+    {
+        m_file->write("物品名:,");
+        m_file->write(ui->namesComboBox->currentText().toUtf8().data());
+        m_file->write(",规格:,");
+        m_file->write(ui->etalonComboBox->currentText().toUtf8().data());
+        m_file->write("\n");
+        for(int j=0;j<ui->tableWidget->columnCount();j++)
+        {
+            m_file->write(ui->tableWidget->horizontalHeaderItem(j)->text().toUtf8().data());
+            if(j!=ui->tableWidget->columnCount() -1)
+            {
+                m_file->write(",");
+            }
+        }
+        m_file->write("\n");
+
+        for(int i = 0;i<ui->tableWidget->rowCount();i++)
+        {
+            for(int j=0;j<ui->tableWidget->columnCount();j++)
+            {
+                m_file->write(ui->tableWidget->item(i,j)->text().toUtf8().data());
+                if(j!=ui->tableWidget->columnCount() -1)
+                {
+                    m_file->write(",");
+                }
+            }
+            if(i!=ui->tableWidget->rowCount() -1 )
+            {
+                m_file->write("\n");
+            }
+        }
+        m_file->close();
+    }
+    QMessageBox::information(this, tr("OK"), tr("保存成功！"));
+}
